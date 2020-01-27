@@ -1,0 +1,7 @@
+{
+    "root": "C:\\Users\\Marco\\OneDrive\\Desktop",
+    "node_env": "development",
+    "default_script": "app.js",
+    "apps": {},
+    "web": {}
+}
