@@ -2,7 +2,7 @@
 ActiStack is an android app that helps you get organized, despite not having a regular sleep schedule.
 It was built using React Native.
 
-# Usage
+# How to use the app
 You can input activities with or without duration and use them to plan your day. After inserting your first activity into your plan, you can stack further by inserting at the top or bottom. Use the arrow in the header bar to switch direction.
 
 # Installation
@@ -15,7 +15,7 @@ cd android
 open './app/build/outputs/apk/release/'
 ```
 
-# Development
+# How to develop
 To use the development version, you have to install adb and connect your phone via USB. Activate USB-Debugging and accept the request to install the app when prompted.
 You can get the ID of your device by running:
 ```
