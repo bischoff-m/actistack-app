@@ -8,6 +8,8 @@ import {
     View,
     Text,
     Alert,
+    Modal,
+    ScrollView
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -16,6 +18,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import globalStyles from '../styles/Styles';
 import GraphItem from '../components/GraphItem';
+import Tutorial from '../components/Tutorial';
 
 class GraphScreen extends React.Component {
     constructor(props) {
@@ -25,11 +28,19 @@ class GraphScreen extends React.Component {
             showPicker: false,
             graphItems: [],
             firstItemTime: -1,
-            statusBar: null
+            statusBar: null,
+            showTutorial: false
         }
 
         global.activityItems = {}
         global.insertAtTop = true
+
+        // load state of showTutorial
+        AsyncStorage.getItem("showTutorial").then((value) => {
+            if(!value)
+                value = true;
+            this.setState({ showTutorial: value });
+        });
         
         // load activityItems and graphItems and do update
         AsyncStorage.getItem("activityItems").then((items) => {
@@ -63,7 +74,7 @@ class GraphScreen extends React.Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: "Today",
+            title: "Schedule",
             headerRight: () => (
                 <View style={{
                         flexDirection: "row",
@@ -265,7 +276,7 @@ class GraphScreen extends React.Component {
     }
 
     render() {
-        const { graphItems, showPicker, firstItemTime } = this.state;
+        const { graphItems, showPicker, firstItemTime, showTutorial } = this.state;
         const { navigation } = this.props;
         
         // create graph component for each entry in state array
@@ -329,6 +340,20 @@ class GraphScreen extends React.Component {
                             display={"clock"}
                             onChange={this.onTimePickerDone.bind(this)} />
                     }
+                    { // Tutorial modal
+                        <Modal visible={showTutorial}>
+                            <ScrollView style={styles.tutorialModal}>
+                                <View>
+                                    <Text style={styles.text}>
+                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                                    </Text>
+                                </View>
+                            </ScrollView>
+                        </Modal>
+                    }
                 </SafeAreaView>
             </>
         );
@@ -354,6 +379,27 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+    tutorialModal: {
+        // position: "absolute",
+        backgroundColor: "#22283B",
+        // top: 0,
+        // bottom: 0,
+        // left: 0,
+        // right: 0,
+        padding: 20,
+        // alignItems: "center",
+        // justifyContent: "center",
+    },
+    text: {
+        color: "white",
+        fontSize: 20,
+        textAlign: "center"
+    }
 });
 
 export default GraphScreen;
+
+// TODO: add swipeable screen
+// https://github.com/leecade/react-native-swiper
+// 5.
+// https://blogs.adobe.com/creativecloud/onboarding-the-what-when-and-how-of-app-walkthroughs/

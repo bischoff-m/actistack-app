@@ -1,11 +1,9 @@
 import React from 'react';
 import {
     StyleSheet,
-    TouchableOpacity, 
-    View, 
+    TouchableOpacity,
     Text
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ActivityItem = props => {
     const { id, onItemPress, onItemLongPress, onItemFavored } = props;
