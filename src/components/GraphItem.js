@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     },
     activityContainer: {
         flex: 4,
-        // elevation: 10,
     },
     timeContainer: {
         flex: 1,

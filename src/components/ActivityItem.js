@@ -21,7 +21,11 @@ const ActivityItem = props => {
 
     return (
         <>
-            <TouchableOpacity onPress={onItemPress} onLongPress={onItemLongPress} style={[styles.container, {backgroundColor: `hsl(${item.hue}, 55%, 80%)`}]}>
+            <TouchableOpacity
+                onPress={onItemPress}
+                onLongPress={onItemLongPress}
+                style={[styles.container, {backgroundColor: `hsl(${item.hue}, 55%, 80%)`}]}
+            >
                 <Text style={[styles.text, {flex: 1}]}>
                     {item.activity}
                 </Text>

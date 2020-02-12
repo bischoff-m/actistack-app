@@ -8,7 +8,6 @@ export default StyleSheet.create({
         flex: 1
     },
     separator: {
-        // borderBottomColor: "#e0e0e0",
         borderBottomColor: "transparent",
         borderBottomWidth: 2,
     },
