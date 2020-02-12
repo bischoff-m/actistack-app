@@ -945,6 +945,11 @@
     eslint-plugin-react-native "3.6.0"
     prettier "1.16.4"
 
+"@react-native-community/viewpager@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/viewpager/-/viewpager-3.3.0.tgz#e613747a43a31a6f3278f817ba96fdaaa7941f23"
+  integrity sha512-tyzh79l4t/hxiyS9QD3LRmWMs8KVkZzjrkQ8U8+8To1wmvVCBtp8BenvNsDLTBO7CpO/YmiThpmIdEZMr1WuVw==
+
 "@react-navigation/core@^3.5.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.5.1.tgz#7a2339fca3496979305fb3a8ab88c2ca8d8c214d"
@@ -5728,6 +5733,18 @@ react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.2.tgz#984120fd4d16800e9a738208ab1fba422d23b5ab"
   integrity sha512-INBT1QEgtcCCgvccr5/86CfD71fw9EPmDxgiJX4I2Ddr6ZsV6iFXsuby+qWJPtmNuMY0zByTsG4468P7nHuNWA==
+
+react-native-best-viewpager@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-best-viewpager/-/react-native-best-viewpager-1.0.4.tgz#26ccf9a2946c9d8935fb0ff36611d64ac96ec4f0"
+  integrity sha512-apkGaaUWK7kGkFyPa403SfMHfyYkanCXQw1xF0+0xIfg0wyXMPZhBQdGHYKzrB9bMOJyMaMYxoh+7ifiZbuiDQ==
+  dependencies:
+    "@react-native-community/viewpager" "^3.3.0"
+
+react-native-custom-fonts@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-custom-fonts/-/react-native-custom-fonts-1.0.5.tgz#96032a7d9bd33342a02463cc2899d6a23e5d24a6"
+  integrity sha512-aPDM9OFcJgzC1GmRl2qR4Y+3AhIOohib+E4omExu3XeSqew1qKmFwjsyobIamun9ef83UPAcGn06ECv4FGR9vA==
 
 react-native-draggable-flatlist@^1.1.9:
   version "1.1.9"
