@@ -4,6 +4,7 @@ build/
 .idea
 .gradle
 local.properties
+gradle.properties
 *.iml
 
 # node.js
@@ -19,8 +20,6 @@ buck-out/
 
 # exclude to protect sensitive data
 *.log
-*.properties
-*.bat
 
 bin
 gen
