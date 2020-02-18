@@ -1,22 +1,26 @@
-import React from 'react';
+import React from "react";
 import {
     StyleSheet,
     TouchableOpacity,
     View,
     Text,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import ViewPager from '@react-native-community/viewpager';
-import AsyncStorage from '@react-native-community/async-storage';
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import ViewPager from "@react-native-community/viewpager";
+import AsyncStorage from "@react-native-community/async-storage";
 
-import globalStyles from '../styles/Styles';
+import globalStyles from "../styles/Styles";
 
+// this tutorial screen features 7 pages that explain how to use the app
+// it is triggered the first time the app gets opened and each time
+// the help button in the header of GraphScreen is pressed
 class TutorialScreen extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isUpIcon: true,
+            activePage: 0,
         }
     }
 
@@ -24,111 +28,111 @@ class TutorialScreen extends React.Component {
         header: null,
     }
 
-    
-    getNewHueFromArray(allHues) {
-        // if its the first hue, return a random color
-        if(allHues.length === 0)
-            return Math.floor(Math.random() * 360);
-        
-        allHues.sort((a, b) => a > b);
-        // iterate all hues and get candidates with maximum distance
-        let candidates = [];
-        var maxDiff = -1;
-        for(var i = 0; i < allHues.length; i++) {
-            // calculate hue difference between hue[i] and hue[i+1]
-            let curDiff = (allHues[(i + 1) % allHues.length] - allHues[i]);
-            if(curDiff <= 0)
-                curDiff += 360;
-            // check if hue[i] is a candidate
-            if(maxDiff < curDiff) {
-                candidates = [allHues[i]];
-                maxDiff = curDiff;
-            } else if(maxDiff === curDiff) {
-                candidates.push(allHues[i]);
-            }
+
+    getPageIndicators() {
+        let indicators = [];
+        for (let i = 0; i < 7; i++) {
+            const white = "rgba(255, 255, 255, 0.9)";
+            const black = "rgba(50, 50, 50, 0.7)";
+            const color = i === this.state.activePage ? white : black;
+            const indicator = (
+                <TouchableOpacity
+                    key={i}
+                    style={{padding: 4.5}}
+                    onPress={() => {
+                        if(this.viewpager)
+                            this.viewpager.setPage(i);
+                    }}
+                >
+                    <View style={{
+                        backgroundColor: color,
+                        width: 7,
+                        height: 7,
+                        borderRadius: 3.5,
+                        elevation: 2,
+                    }}></View>
+                </TouchableOpacity>
+            );
+            indicators.push(indicator);
         }
-        // choose random used hue to insert new hue next to it
-        var chosen = candidates[Math.floor(Math.random() * candidates.length)]
-        return (chosen + Math.round(maxDiff / 2)) % 360;
+        return indicators;
+    }
+    
+    getGraphScreenHeader(focus) {
+        return (
+            <View style={{ flexDirection: "row", backgroundColor: "#22283B" }}>
+                <TouchableOpacity style={globalStyles.iconWrapper}>
+                    <Icon name={"help-outline"} size={24} color="white" />
+                    {focus == 0 && <View style={styles.highlight}></View>}
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => this.setState({isUpIcon: !this.state.isUpIcon})}
+                    style={globalStyles.iconWrapper}>
+                    <Icon name={this.state.isUpIcon ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="white" />
+                    {focus == 1 && <View style={styles.highlight}></View>}
+                </TouchableOpacity>
+                <TouchableOpacity style={globalStyles.iconWrapper}>
+                    <Icon name="delete" size={24} color="white" />
+                    {focus == 2 && <View style={styles.highlight}></View>}
+                </TouchableOpacity>
+                <TouchableOpacity style={globalStyles.iconWrapper}>
+                    <Icon name="add" size={24} color="white" />
+                    {focus == 3 && <View style={styles.highlight}></View>}
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    getActivityItem(color, name, duration) {
+        return (
+            <TouchableOpacity
+                style={{
+                    backgroundColor: color,
+                    flexDirection: "row",
+                    height: 56,
+                    alignItems: "center",
+                    margin: 1,
+                    borderRadius: 4,
+                    paddingLeft: 16,
+                    paddingRight: 16,
+                    elevation: 3,
+                }}
+            >
+                <Text style={{flex: 1, fontSize: 16, color: "black"}}>
+                    {name}
+                </Text>
+                <Text style={{fontSize: 16, color: "black"}}>
+                    {duration}
+                </Text>
+            </TouchableOpacity>
+        );
+    }
+
+    getGraphItem(hue, name, duration, time) {
+        return (
+            <TouchableOpacity
+                style={{
+                    borderTopColor: "white",
+                    borderTopWidth: 1,
+                    flexDirection: "row",
+                    flex: duration,
+                }} 
+            >
+                <View style={[globalStyles.centered, {backgroundColor: `hsl(${hue}, 55%, 60%)`, flex: 1, elevation: 5}]}>
+                    <Text style={{fontSize: 16, color: "white"}}>
+                        {name}
+                    </Text>
+                </View>
+                <View style={{width: 60}}>
+                    <Text style={{fontSize: 16, color: "white", textAlign: "right"}}>
+                        {time}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
     }
 
     render() {
-        const { isUpIcon } = this.state;
-
-        const getGraphScreenHeader = (focus) => {
-            return (
-                <View style={{ flexDirection: "row", backgroundColor: "#22283B" }}>
-                    <TouchableOpacity style={globalStyles.iconWrapper}>
-                        <Icon name={"help-outline"} size={24} color="white" />
-                        {focus == 0 && <View style={styles.highlight}></View>}
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.setState({isUpIcon: !isUpIcon})}
-                        style={globalStyles.iconWrapper}>
-                        <Icon name={isUpIcon ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={24} color="white" />
-                        {focus == 1 && <View style={styles.highlight}></View>}
-                    </TouchableOpacity>
-                    <TouchableOpacity style={globalStyles.iconWrapper}>
-                        <Icon name="delete" size={24} color="white" />
-                        {focus == 2 && <View style={styles.highlight}></View>}
-                    </TouchableOpacity>
-                    <TouchableOpacity style={globalStyles.iconWrapper}>
-                        <Icon name="add" size={24} color="white" />
-                        {focus == 3 && <View style={styles.highlight}></View>}
-                    </TouchableOpacity>
-                </View>
-            );
-        };
-
-        const getActivityItem = (color, name, duration) => {
-            return (
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: color,
-                        flexDirection: 'row',
-                        height: 56,
-                        alignItems: 'center',
-                        margin: 1,
-                        borderRadius: 4,
-                        paddingLeft: 16,
-                        paddingRight: 16,
-                        elevation: 3,
-                    }}
-                >
-                    <Text style={{flex: 1, fontSize: 16, color: "black"}}>
-                        {name}
-                    </Text>
-                    <Text style={{fontSize: 16, color: "black"}}>
-                        {duration}
-                    </Text>
-                </TouchableOpacity>
-            );
-        };
-
-        const getGraphItem = (hue, name, duration, time) => {
-            return (
-                <TouchableOpacity
-                    style={{
-                        borderTopColor: "white",
-                        borderTopWidth: 1,
-                        flexDirection: "row",
-                        flex: duration,
-                    }} 
-                >
-                    <View style={[globalStyles.centered, {backgroundColor: `hsl(${hue}, 55%, 60%)`, flex: 1, elevation: 5}]}>
-                        <Text style={{fontSize: 16, color: "white"}}>
-                            {name}
-                        </Text>
-                    </View>
-                    <View style={{width: 60}}>
-                        <Text style={{fontSize: 16, color: "white", textAlign: "right"}}>
-                            {time}
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-            );
-        };
-
         return (
             <View style={styles.tutorialContainer} >
 
@@ -145,8 +149,8 @@ class TutorialScreen extends React.Component {
                             style={{
                                 padding: 10,
                                 top: 2,
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                                alignItems: "center",
+                                justifyContent: "center",
                             }}>
                             <Icon name={"alarm"} size={24} color="black" />
                         </View>
@@ -169,8 +173,20 @@ class TutorialScreen extends React.Component {
                     </TouchableOpacity>
                 </View>
 
+
+                {/* Footer containing page indicatiors */}
+                <View style={styles.footer}>
+                    {this.getPageIndicators()}
+                </View>
+
+
                 {/* Tutorial Pages */}
-                <ViewPager style={styles.viewPager} initialPage={0}>
+                <ViewPager
+                    style={styles.viewPager}
+                    initialPage={this.state.activePage}
+                    onPageSelected={(event) => this.setState({activePage: event.nativeEvent.position})}
+                    ref={(viewpager) => {this.viewpager = viewpager}}
+                >
                     <View key="0" style={[styles.page, styles.page0]}>
                         <Text style={styles.pageHeader}>
                             Welcome to ActiStack
@@ -181,7 +197,7 @@ class TutorialScreen extends React.Component {
                     </View>
 
                     <View key="1" style={[styles.page, styles.page1]}>
-                        {getGraphScreenHeader(3)}
+                        {this.getGraphScreenHeader(3)}
                         <Text style={styles.pageHeader}>
                             Your Schedule
                         </Text>
@@ -192,8 +208,8 @@ class TutorialScreen extends React.Component {
                     </View>
 
                     <View key="2" style={[styles.page, styles.page2]}>
-                        {getActivityItem("hsl(32, 98%, 65%)", "Lecture", "1h 30min")}
-                        {getActivityItem("hsl(200, 98%, 65%)", "Work", "")}
+                        {this.getActivityItem("hsl(32, 98%, 65%)", "Lecture", "1h 30min")}
+                        {this.getActivityItem("hsl(200, 98%, 65%)", "Work", "")}
                         <Text style={styles.pageHeader}>
                             Adding Activities
                         </Text>
@@ -201,13 +217,13 @@ class TutorialScreen extends React.Component {
                             Enter a <Text style={{textDecorationLine: "underline"}}>name</Text> and hit enter to create a new activity.
                         </Text>
                         <Text style={styles.pageText}>
-                            Choose a <Text style={{textDecorationLine: "underline"}}>duration</Text> or hit cancel to get a get an item without a duration.
+                            Choose a <Text style={{textDecorationLine: "underline"}}>duration</Text> or hit cancel to get an item without a duration.
                         </Text>
                     </View>
 
                     <View key="3" style={[styles.page, styles.page3]}>
-                        {getActivityItem("hsl(32, 98%, 65%)", "Lecture", "1h 30min")}
-                        {getActivityItem("hsl(200, 98%, 65%)", "Work", "")}
+                        {this.getActivityItem("hsl(32, 98%, 65%)", "Lecture", "1h 30min")}
+                        {this.getActivityItem("hsl(200, 98%, 65%)", "Work", "")}
                         <Text style={styles.pageHeader}>
                             Using Activities
                         </Text>
@@ -229,8 +245,8 @@ class TutorialScreen extends React.Component {
                                 overflow: "hidden",
                                 zIndex: 50,
                             }}>
-                                {getGraphItem("hsl(32, 98%, 65%)", "Lecture", 90, "14:30")}
-                                {getGraphItem("hsl(200, 98%, 65%)", "Work", 90, "16:00")}
+                                {this.getGraphItem("hsl(32, 98%, 65%)", "Lecture", 90, "14:30")}
+                                {this.getGraphItem("hsl(200, 98%, 65%)", "Work", 90, "16:00")}
                             </View>
                         </View>
 
@@ -238,7 +254,7 @@ class TutorialScreen extends React.Component {
                             Your Schedule
                         </Text>
                         <Text style={styles.pageText}>
-                            After selecting an activity, it gets <Text style={{textDecorationLine: "underline"}}>inserted</Text> to your schedule.
+                            After selecting an activity, it gets <Text style={{textDecorationLine: "underline"}}>inserted</Text> into your schedule.
                         </Text>
                         <Text style={styles.pageText}>
                             Again, long press to <Text style={{textDecorationLine: "underline"}}>delete</Text> an item.
@@ -246,7 +262,7 @@ class TutorialScreen extends React.Component {
                     </View>
 
                     <View key="5" style={[styles.page, styles.page5]}>
-                        {getGraphScreenHeader(1)}
+                        {this.getGraphScreenHeader(1)}
                         <Text style={styles.pageHeader}>
                             Switching Direction
                         </Text>
@@ -311,6 +327,16 @@ const styles = StyleSheet.create({
         fontFamily: "DidactGothic-Regular",
     },
 
+    footer: {
+        flexDirection: "row",
+        position: "absolute",
+        zIndex: 100,
+        left: 0,
+        right: 0,
+        bottom: 30,
+        justifyContent: "center",
+    },
+
     viewPager: {
         flex: 1,
         zIndex: 0,
@@ -349,7 +375,7 @@ const styles = StyleSheet.create({
     page0: { backgroundColor: "hsl(205, 80%, 50%)" },
     page1: { backgroundColor: "hsl(32, 98%, 65%)" },
     page2: { backgroundColor: "hsl(160, 50%, 50%)" },
-    page3: { backgroundColor: "hsl(287, 90%, 55%)" },
+    page3: { backgroundColor: "hsl(287, 40%, 50%)" },
     page4: { backgroundColor: "hsl(150, 98%, 40%)" },
     page5: { backgroundColor: "hsl(4, 90%, 65%)" },
     page6: { backgroundColor: "hsl(197, 90%, 65%)" },
