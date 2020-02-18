@@ -29,6 +29,6 @@ To only build and install the development apk, run:
 ```
 cd android
 ./gradlew assembleDebug
-adb -s "your-device-id" reverse tcp:8081 tcp:8081
-adb -s "your-device-id" install app/build/outputs/apk/debug/app-debug.apk
+adb -s <your-device-id> reverse tcp:8081 tcp:8081
+adb -s <your-device-id> install app/build/outputs/apk/debug/app-debug.apk
 ```
