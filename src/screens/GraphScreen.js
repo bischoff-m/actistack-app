@@ -14,8 +14,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import globalStyles from '../styles/Styles';
 import GraphItem from '../components/GraphItem';
 
-// import DraggableFlatList from 'react-native-draggable-flatlist';
-
 class GraphScreen extends React.Component {
     constructor(props) {
         super(props);

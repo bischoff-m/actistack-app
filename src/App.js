@@ -31,7 +31,7 @@ const globalErrorHandler = (error, isFatal) => {
     if (__DEV__)
         defaultHandler(error, isFatal);
 }
-// ErrorUtils.setGlobalHandler(globalErrorHandler);
+ErrorUtils.setGlobalHandler(globalErrorHandler);
 
 
 
