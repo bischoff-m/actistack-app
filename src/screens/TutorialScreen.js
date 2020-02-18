@@ -267,7 +267,7 @@ class TutorialScreen extends React.Component {
                             Switching Direction
                         </Text>
                         <Text style={styles.pageText}>
-                            The arrow button determines whether the activity is inserted at the <Text style={{textDecorationLine: "underline"}}>top or bottom</Text>.
+                            The arrow button indicates whether the activity is inserted at the <Text style={{textDecorationLine: "underline"}}>top or bottom</Text>.
                         </Text>
                     </View>
 

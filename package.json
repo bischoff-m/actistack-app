@@ -6,7 +6,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "build-android": "cd android && .\\gradlew assembleRelease"
+    "build": "cd android && .\\gradlew assembleRelease",
+    "bundle": "cd android && .\\gradlew bundleRelease"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.0",
