@@ -14,7 +14,7 @@ To build your own, use the following commands:
 yarn install
 cd android
 ./gradlew assembleRelease
-open './app/build/outputs/apk/release/'
+start '.\app\build\outputs\apk\release'
 ```
 
 # How to develop
